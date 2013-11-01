@@ -50,6 +50,10 @@ This library also works great with [OOPS.js for Node](https://github.com/Cleod9/
 
 ## Version History ##
 
+**1.0.1**
+
+-Modified for Node.js compatibility
+
 **1.0.0**
 
 -Initial release
