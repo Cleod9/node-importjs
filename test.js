@@ -1,8 +1,9 @@
-var fs = require('fs');
-var ImportJS = require(__dirname + '/index.js');
-ImportJS.settings.node_flag = true;
+var ImportJS = require('./index.js');
+
+ImportJS.settings.debug = true;
 
 ImportJS.preload({
+	require: require,
 	baseUrl: '',
 	files: {
 		tests: {

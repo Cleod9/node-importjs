@@ -1,5 +1,5 @@
-//Demonstrates an external js "Class" file
-ImportJS.pack('tests.Sample', function() {
+//Demonstrates an external js "Class" file compatible with ImportJS;
+module.exports = ['tests.Sample', function() {
 	function Sample() { 
 		var foo = 'I am a Sample class';
 		this.value = function() {
@@ -7,4 +7,4 @@ ImportJS.pack('tests.Sample', function() {
 		}
 	};
 	return Sample;
-});
+}];

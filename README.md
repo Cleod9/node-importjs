@@ -4,7 +4,7 @@
 
 (For the original library and **complete usage instructions**, please see: [https://github.com/Cleod9/importjs](https://github.com/Cleod9/importjs))
 
-This library is a Node.js port of [ImportJS](https://github.com/Cleod9/importjs).
+This library is a Node.js port of [ImportJS](https://github.com/Cleod9/importjs) that allows you to use the same package-loading features but with node modules on the filesystem. The only difference between the browser and Node version is that you must define your modules slightly differently. See below for details.
 
 ## Installation ##
 
@@ -17,21 +17,21 @@ And that's it! You can then start using it by simply requiring the importjs pack
 var ImportJS = require('importjs');
 ```
 
-You will then have access to the library through the variable `ImportJS`.  Please note that this object's scope is limited to the module it was required in, so if you would like to share the same instance of the library across separate modules you will need to make sure to pass references of the `ImportJS`Object down to each of them.
-
-Also note that ImportJS for Node.js loads external files via Javascript's `eval()` function instead of tags. 
-
+You will then have access to the library through the variable `ImportJS`. The Node implementation is slightly different than the original library however, in that you must write your modules
 
 See below for a quick example:
 
 ```
-//Preload packages
+//Preload packages dynamically through the filesystem
 ImportJS.preload({
 	baseUrl: '',
 	files: {
 		tests: {
-			Sample: 'Sample.js',
+			Sample: 'Sample.js', //<- File ./tests/Sample.js will be loaded into ImportJS
 		}
+	},
+	ready: function(files) {
+		ImportJS.compile(); //Readies the library for use
 	}
 });
 
@@ -42,13 +42,40 @@ ImportJS.pack('com.project.Class', function() {
 	return Class;
 });
 ```
+When preloading packages via the `preload()` function, you must structure your code a little differently from the browser version:
 
-For **full instructions**, see the original [ImportJS](https://github.com/Cleod9/importjs).
+```javascript
+//Return an args array that node-importjs will use to call `ImportJS.pack` once the code is ready to be compiled.
+module.exports = ['tests.Sample', function() {
+	function Sample() { 
+		var foo = 'I am a Sample class';
+		this.value = function() {
+			return foo;
+		}
+	};
+	return Sample;
+}];
+```
+Instead of wrapping your code within a `pack()` function call, you are exposing the code via an array of arguments for node-importjs to pack for you. The library will simply make a call to `ImportJS.pack.apply(this, [yourArgs])` which allows you to retain the same global ImportJS package tree as additional files are loaded.
+
+
+For **the detailed instructions on this library's features**, see the original [ImportJS](https://github.com/Cleod9/importjs).
 
 This library also works great with [OOPS.js for Node](https://github.com/Cleod9/node-oopsjs)!
 
 
 ## Version History ##
+
+**1.2.0**
+
+-Extracted node-specific identifiers to improve linting
+-Slight syntax adjustments for even better linting
+-Node.js version now loads the external files via require()
+**^ Note:** v1.2.0 is not backwards compatible given that packages are now loaded via Node's standard require() function. See above for details. 
+
+**1.1.0**
+
+-Changed file loading approach to improve debuggability in Node
 
 **1.0.1**
 
