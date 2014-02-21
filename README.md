@@ -69,8 +69,11 @@ This library also works great with [OOPS.js for Node](https://github.com/Cleod9/
 **1.2.0**
 
 -Extracted node-specific identifiers to improve linting
+
 -Slight syntax adjustments for even better linting
+
 -Node.js version now loads the external files via require()
+
 **^ Note:** v1.2.0 is not backwards compatible given that packages are now loaded via Node's standard require() function. See above for details. 
 
 **1.1.0**
