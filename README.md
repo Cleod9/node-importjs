@@ -32,6 +32,8 @@ ImportJS.preload({
 	},
 	ready: function(files) {
 		//At this point your packages are good to go, you could use this as an entry point for your application
+		var Sample = ImportJS.unpack('tests.Sample');
+		var mySample = new Sample();
 	}
 });
 
@@ -42,14 +44,16 @@ ImportJS.pack('com.project.Class', function() {
 	return Class;
 });
 ```
-Then when dynamically preloading packages via the `preload()` function, you must structure your code a little differently from the browser version:
+So just like the browser version, you have the option of loading up files dynamically into ImportJS via the `preload()` function, or just defining them all in one file.
+
+When dynamically preloading packages via the `preload()` function, you simply make sure that these other files also contain the `require('importjs')'` at the top.
 
 ```javascript
-//Return an args array that node-importjs will use to call `ImportJS.pack` once the code is ready to be compiled.
-module.exports = ['tests.Sample', function(ImportJS) {
-	/* Follow same syntax as browser version of ImportJS */
-	
-	//Module "CodeFile" is included without require()
+var ImportJS = require('importjs');
+
+/* Follow same syntax as browser version of ImportJS */
+ImportJS.pack('tests.Sample', function() {
+	//Module "CodeFile" is included without require() thanks to ImportJS
 	var CodeFile = ImportJS.unpack('some.other.CodeFile');
 	
 	function Sample() { 
@@ -58,12 +62,14 @@ module.exports = ['tests.Sample', function(ImportJS) {
 			return foo;
 		}
 	};
+
+	//Return your 'exported' variable ('Sample' in this case) and a post-compilation function to run
 	return [Sample, function() {
-		//-If you have circular deps, import them here and hoist them up as you would in the browser version of the code
+		//-If you have circular deps, import them here to hoist them up as you would in the browser version of the code
 	}];
-}, false]; //<-Optional "compiled" arg if your class has dependencies that may not be loaded yet, same as browser version
+}, false); //<-Optional "compiled" arg if your class has dependencies that may not be loaded yet, same as browser version
 ```
-Instead of using `ImportJS.pack()`, you are placing the arguments you would have used for `pack()`  into an array of args for node-importjs to pack for you. This array is exposed via module.exports. The library will simply make a call to `ImportJS.pack.apply(this, [yourArgs])` which allows you to retain the same global ImportJS package tree as additional files are loaded. Also note that the function wrapper for your code should take a single argument to house the ImportJS library (in this case I named it `ImportJS` for consistency). This features allows all of your packaged code files to communicate with one another explicitly through ImportJS. In other words, instead of using `require()` to retrieve your package-module hybrids you can simply load them via `ImportJS.unpack('path.to.package')`.
+As you can see, this is exactly how you would write code for this library with the browser version (except for the `require()` of course). One thing to note however, is that you are not exporting your package via `module.exports` as with the standard module practice. Instead, your package is stored as a reference inside of ImportJS which is loaded automatically for you when you call `ImportJS.preload()`. This features allows all of your packaged code files to communicate with one another explicitly through ImportJS. In other words, instead of using `require()` to retrieve your package-module hybrids you can simply load them via `ImportJS.unpack('path.to.package')`.
 
 
 For **the detailed instructions on this library's features**, see the test file included in this repo, as well as the docs for the original [ImportJS](https://github.com/Cleod9/importjs).
@@ -72,6 +78,10 @@ This library also works great with [OOPS.js for Node](https://github.com/Cleod9/
 
 
 ## Version History ##
+
+**1.4.0**
+
+-One last major re-implementation to simplify the package declaration in Node.js
 
 **1.3.0**
 

@@ -1,6 +1,11 @@
 //Demonstrates an external js "Class" file compatible with ImportJS with a dependancy
 
-module.exports = ['tests.Sample3', function() {
+var ImportJS = require('../index.js'); //(must use index.js since this test is local to its own module folder)
+
+/*replace the above line with this when using the lib in your code */
+// var ImportJS = require('importjs');
+
+ImportJS.pack('tests.Sample3', function() {
 	//Save the dependency
 	var Sample2;
 
@@ -17,4 +22,4 @@ module.exports = ['tests.Sample3', function() {
 	return [Sample3, function() {
 		Sample2 = ImportJS.unpack('tests.Sample2'); //Hoist up Sample2
 	}];
-}, false];
+}, false);

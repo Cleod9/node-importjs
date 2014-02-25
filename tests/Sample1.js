@@ -1,6 +1,11 @@
 //Demonstrates an external js "Class" file compatible with ImportJS
 
-module.exports = ['tests.Sample1', function() {
+var ImportJS = require('../index.js'); //(must use index.js since this test is local to its own module folder)
+
+/*replace the above line with this when using the lib in your code */
+// var ImportJS = require('importjs');
+
+ImportJS.pack('tests.Sample1', function() {
 	function Sample1() { 
 		//Print class name
 		this.toString = function() {
@@ -10,4 +15,4 @@ module.exports = ['tests.Sample1', function() {
 	return [Sample1, function () {
 
 	}];
-}, false];
+}, false);
