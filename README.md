@@ -38,10 +38,12 @@ ImportJS.preload({
 });
 
 //Or define packages explicitly
-ImportJS.pack('com.project.Class', function() {
+ImportJS.pack('com.project.Class', function(module, exports) {
 	function Class() { 
 	};
-	return Class;
+
+	//Just like Node, you can set your exports via 'module.exports' and/or 'exports'
+	module.exports = Class;
 });
 ```
 So just like the browser version, you have the option of loading up files dynamically into ImportJS via the `preload()` function, or just defining them all in one file.
@@ -52,7 +54,7 @@ When dynamically preloading packages via the `preload()` function, you simply ma
 var ImportJS = require('importjs');
 
 /* Follow same syntax as browser version of ImportJS */
-ImportJS.pack('tests.Sample', function() {
+ImportJS.pack('tests.Sample', function(module) {
 	//Module "CodeFile" is included without require() thanks to ImportJS
 	var CodeFile = ImportJS.unpack('some.other.CodeFile');
 	
@@ -63,13 +65,14 @@ ImportJS.pack('tests.Sample', function() {
 		}
 	};
 
-	//Return your 'exported' variable ('Sample' in this case) and a post-compilation function to run
-	return [Sample, function() {
+	//Exposes your 'exported' variable ('Sample' in this case) and a post-compilation function to run
+	module.exports = Sample;
+	module.postCompile = function() {
 		//-If you have circular deps, import them here to hoist them up as you would in the browser version of the code
-	}];
-}, false); //<-Optional "compiled" arg if your class has dependencies that may not be loaded yet, same as browser version
+	};
+});
 ```
-As you can see, this is exactly how you would write code for this library with the browser version (except for the `require()` of course). One thing to note however, is that you are not exporting your package via `module.exports` as with the standard module practice. Instead, your package is stored as a reference inside of ImportJS which is loaded automatically for you when you call `ImportJS.preload()`. This features allows all of your packaged code files to communicate with one another explicitly through ImportJS. In other words, instead of using `require()` to retrieve your package-module hybrids you can simply load them via `ImportJS.unpack('path.to.package')`.
+As you can see, this is exactly how you would write code for this library with the browser version (except for the `require()` of course). One thing to note however, is that you are using a custom version of `module.exports` to store your package/module as a reference inside of ImportJS. Your code is then compiled for you when you call `ImportJS.preload()` or `ImportJS.compile()`. This features allows all of your packaged code files to communicate with one another explicitly through ImportJS. In other words, instead of using `require()` to retrieve your package-module hybrids you can simply load them via `ImportJS.unpack('path.to.package')`.
 
 
 For **the detailed instructions on this library's features**, see the test file included in this repo, as well as the docs for the original [ImportJS](https://github.com/Cleod9/importjs).
@@ -78,6 +81,17 @@ This library also works great with [OOPS.js for Node](https://github.com/Cleod9/
 
 
 ## Version History ##
+
+**2.0.0**
+
+-Introduced a new programming model that merges Node.js module style with ActionScript/Java-style packages.
+
+-Removed the "compiled" argument for pack() to improve code consistency
+
+-Calling compile() is now always required for non-preloaded packages packages (though preloading will still compile for you)
+
+-Renamed "files" preload parameter to "packages"
+
 
 **1.4.0**
 

@@ -5,7 +5,7 @@ var ImportJS = require('../index.js'); //(must use index.js since this test is l
 /*replace the above line with this when using the lib in your code */
 // var ImportJS = require('importjs');
 
-ImportJS.pack('tests.Sample2', function() {
+ImportJS.pack('tests.Sample2', function(module) {
 	//Save the dependency
 	var Sample1;
 	var Sample3;
@@ -24,8 +24,10 @@ ImportJS.pack('tests.Sample2', function() {
 			return new Sample3();
 		};
 	};
-	return [Sample2, function() {
+	module.exports = Sample2;
+	module.postCompile = function() {
+		//Hoist up Sample1 and Sample3
 		Sample1 = ImportJS.unpack('tests.Sample1');
-		Sample3 = ImportJS.unpack('tests.Sample3'); //Hoist up Sample3
-	}];
-}, false);
+		Sample3 = ImportJS.unpack('tests.Sample3');
+	};
+});

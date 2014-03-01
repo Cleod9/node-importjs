@@ -5,7 +5,7 @@ ImportJS.settings.debug = true;
 ImportJS.preload({
 	require: require,
 	baseUrl: '',
-	files: {
+	packages: {
 		tests: {
 			Sample1: 'Sample1.js', //Basic
 			Sample2: 'Sample2.js', //Normal dependency
