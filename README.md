@@ -82,6 +82,10 @@ This library also works great with [OOPS.js for Node](https://github.com/Cleod9/
 
 ## Version History ##
 
+**2.0.1**
+
+-Fixed obscure bug with package IDs that would occur if you had dependencies that required an immediate unpack()
+
 **2.0.0**
 
 -Introduced a new programming model that merges Node.js module style with ActionScript/Java-style packages.
@@ -91,7 +95,6 @@ This library also works great with [OOPS.js for Node](https://github.com/Cleod9/
 -Calling compile() is now always required for non-preloaded packages packages (though preloading will still compile for you)
 
 -Renamed "files" preload parameter to "packages"
-
 
 **1.4.0**
 
