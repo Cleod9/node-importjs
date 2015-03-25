@@ -2,6 +2,8 @@
 
 ----------
 
+[http://www.importjs.org](http://www.importjs.org)
+
 (For the original library and **complete usage instructions**, please see: [https://github.com/Cleod9/importjs](https://github.com/Cleod9/importjs))
 
 This library is a Node.js port of [ImportJS](https://github.com/Cleod9/importjs) that allows you to use the same package-loading features offered by ImportJS on the filesystem. The only difference between the browser and Node version is that you must define your modules slightly differently. See below for details.
