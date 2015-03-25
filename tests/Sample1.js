@@ -5,7 +5,7 @@ var ImportJS = require('../index.js'); //(must use index.js since this test is l
 /*replace the above line with this when using the lib in your code */
 // var ImportJS = require('importjs');
 
-ImportJS.pack('tests.Sample1', function(module) {
+ImportJS.pack('tests.Sample1', function (module, exports) {
 	function Sample1() { 
 		//Print class name
 		this.toString = function() {

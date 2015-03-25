@@ -8,6 +8,9 @@ var ImportJS = require('../index.js'); //(must use index.js since this test is l
 ImportJS.pack('tests.Sample3', function(module) {
 	//Save the dependency
 	var Sample2;
+  this.inject(function () {
+    Sample2 = this.import('tests.Sample2'); //Hoist up Sample2
+  });
 
 	function Sample3() { 
 		//Print class name
@@ -20,7 +23,4 @@ ImportJS.pack('tests.Sample3', function(module) {
 		};
 	};
 	module.exports = Sample3;
-	module.postCompile = function() {
-		Sample2 = ImportJS.unpack('tests.Sample2'); //Hoist up Sample2
-	};
 });

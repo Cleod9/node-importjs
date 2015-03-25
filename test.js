@@ -1,6 +1,6 @@
 var ImportJS = require('./index.js');
 
-ImportJS.settings.debug = true;
+ImportJS._settings.debug = true;
 
 ImportJS.preload({
 	require: require,

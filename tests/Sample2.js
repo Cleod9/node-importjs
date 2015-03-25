@@ -5,10 +5,14 @@ var ImportJS = require('../index.js'); //(must use index.js since this test is l
 /*replace the above line with this when using the lib in your code */
 // var ImportJS = require('importjs');
 
-ImportJS.pack('tests.Sample2', function(module) {
+ImportJS.pack('tests.Sample2', function (module, exports) {
 	//Save the dependency
-	var Sample1;
-	var Sample3;
+	var Sample1, Sample3;
+  this.inject(function () {
+    //Hoist up Sample1 and Sample3
+    Sample1 = this.import('tests.Sample1');
+    Sample3 = this.import('tests.Sample3');
+  });
 
 	function Sample2() { 
 		//Print class name
@@ -25,9 +29,4 @@ ImportJS.pack('tests.Sample2', function(module) {
 		};
 	};
 	module.exports = Sample2;
-	module.postCompile = function() {
-		//Hoist up Sample1 and Sample3
-		Sample1 = ImportJS.unpack('tests.Sample1');
-		Sample3 = ImportJS.unpack('tests.Sample3');
-	};
 });
